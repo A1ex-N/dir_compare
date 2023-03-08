@@ -32,13 +32,13 @@ def hash_dir(path: pathlib.Path, missing_files: list[str]):
         file_name_str = file.name
         abs_path = file.absolute()
 
-        if file_name_str in missing_files:
+        if file_name_str in missing_files or file.is_dir():
             print(
                 Fore.YELLOW
                 + f"Skipping: {abs_path} ({i}/{total_file_in_dir})"
                 + Fore.RESET
             )
-            return
+            continue
 
         size_of_file = os.path.getsize(abs_path)
         print(
