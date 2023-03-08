@@ -1,7 +1,6 @@
 # dir_compare.py
 
-Simple program to compare two directories `src & dst` and tell you if any file hashes
-differ from one another. 
+ Simple python script to compare files in two directories (by hashing them, using hashlib.blake2b) and report mismatches 
 
 For example if you have two dirs
 ```
