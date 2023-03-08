@@ -1,6 +1,7 @@
 # dir_compare.py
 
- Simple python script to compare files in two directories (by hashing them, using hashlib.blake2b) and report mismatches 
+Simple python script to compare files in two directories (by hashing them, using hashlib.blake2b) and report mismatches 
+(files in both directories have to have matching filenames)
 
 For example if you have two dirs
 ```
@@ -25,4 +26,4 @@ two.txt Match: False
 ```
 
 Note:
-The program will skip hashing files that don't exist in both directories, and will ignore sub-directories
+The program will skip hashing files that don't exist in both directories, and will ignore sub-directories.
