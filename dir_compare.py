@@ -1,7 +1,7 @@
+import argparse
 import hashlib
 import os
 import pathlib
-import sys
 from dataclasses import dataclass
 
 from colorama import Fore
@@ -68,18 +68,14 @@ def compare_hashes(hash1: File, hash2: File) -> bool:
 
 
 def main():
-    if len(sys.argv) != 3:
-        print(
-            """
-python dir_compare.py [src] [dst]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("src", type=str, help="The original folder")
+    parser.add_argument("dst", type=str, help="The folder to check")
 
-src is the original directory, and dst is the one you want to verify
-        """
-        )
-        exit(1)
+    args = parser.parse_args()
 
-    src = pathlib.Path(sys.argv[1])
-    dst = pathlib.Path(sys.argv[2])
+    src = pathlib.Path(args.src)
+    dst = pathlib.Path(args.dst)
 
     if src.absolute() == dst.absolute():
         print(Fore.RED + "Can't compare a path to itself")
