@@ -71,14 +71,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("src", type=str, help="The original folder")
     parser.add_argument("dst", type=str, help="The folder to check")
+    parser.add_argument("-s", "--single", action="store_true", 
+                        help="Compare single files rather than a directory")
 
     args = parser.parse_args()
 
     src = pathlib.Path(args.src)
     dst = pathlib.Path(args.dst)
 
+    if args.single:
+        file1 = File(src, get_hash_for_file(src))
+        file2 = File(dst, get_hash_for_file(dst))
+        print(compare_hashes(file1, file2))
+        return
+
     if src.absolute() == dst.absolute():
-        print(Fore.RED + "Can't compare a path to itself")
+        print(Fore.RED + "Can't compare a directory to itself")
         exit(1)
 
     missing_files = list(find_missing_files(src, dst))
