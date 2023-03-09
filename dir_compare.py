@@ -63,6 +63,18 @@ def find_missing_files(dir1: pathlib.Path, dir2: pathlib.Path):
         yield file
 
 
+def compare_single_files(src: pathlib.Path, dst: pathlib.Path):
+    print(Fore.BLUE + f"Hashing: {src} [{os.path.getsize(src.absolute())} bytes]")
+    file1 = File(src, get_hash_for_file(src))
+    print(Fore.BLUE + f"Hashing: {dst} [{os.path.getsize(dst.absolute())} bytes]")
+    file2 = File(dst, get_hash_for_file(dst))
+    is_same = compare_hashes(file1, file2)
+    fore_colour = Fore.RED
+    if is_same is True:
+        fore_colour = Fore.GREEN
+    print(fore_colour + f"{src} & {dst} match: {is_same}" + Fore.RESET)
+
+
 def compare_hashes(hash1: File, hash2: File) -> bool:
     return hash1.hash == hash2.hash
 
@@ -71,18 +83,24 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("src", type=str, help="The original folder")
     parser.add_argument("dst", type=str, help="The folder to check")
-    parser.add_argument("-s", "--single", action="store_true", 
-                        help="Compare single files rather than a directory")
+    parser.add_argument(
+        "-s",
+        "--single",
+        action="store_true",
+        help="Compare single files rather than a directory",
+    )
 
     args = parser.parse_args()
 
     src = pathlib.Path(args.src)
     dst = pathlib.Path(args.dst)
 
+    if not src.exists() or not dst.exists():
+        print(Fore.RED + f"{src} or {dst} doesn't exist" + Fore.RESET)
+        exit(1)
+
     if args.single:
-        file1 = File(src, get_hash_for_file(src))
-        file2 = File(dst, get_hash_for_file(dst))
-        print(compare_hashes(file1, file2))
+        compare_single_files(src, dst)
         return
 
     if src.absolute() == dst.absolute():
